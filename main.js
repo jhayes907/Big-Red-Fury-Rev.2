@@ -7,6 +7,7 @@ canvas.height = 800;
 
 let santa;
 let penguin;
+let reigndeer;
 let score = 0;
 let health = 100;
 let gameFrame = 0;
@@ -14,9 +15,9 @@ ctx.font = '40px Georgia';
 let gameSpeed = .5;
 let gameOver = false;
 
-window.addEventListener('DOMContentLoaded', function(){
+// window.addEventListener('DOMContentLoaded', function(){
 
-})
+// })
 // mouse interaction
 let canvasPosition = canvas.getBoundingClientRect();
 const mouse = {
@@ -142,44 +143,52 @@ santa = new Santa();
 // add penguin sprite paths
 // Baddies
 const penguinsArray = [];
-const penguinImage = new Image();
-// set penguinImage source
-// penguinImage.src = 'penguinImage';
-const incoming = ['L', 'R', 'B'];
+let penguinImage = new Image();
+penguinImage.src = "assets/penguin sprites/Turn-Around2.png"
+// const incoming = ['L', 'R', 'B'];
 class Penguin {
     constructor() {
+        this.Image = penguinImage;
         this.x = Math.random() * canvas.width;
-        this.y = canvas.height + 100 + Math.random() * canvas.height;
+        this.y = 0 - 100;
+        this.width = 85;
+        this.height = 120;
+        this.frameX = 3;
+        this.frameY = 1;
         // modify these properties for size and speed
-        this.radius = 18;
-        this.speed = 1.5;
-        this.position = incoming[Math.floor(Math.random() * 3)];
+        this.radius = 14;
+        this.speed = .5;
+        // this.position = incoming[Math.floor(Math.random() * 3)];
         this.distance;
         this.counted = false;
         // // change to collision kill sound
         // this.sound = math.random() <= 0.5 ? 'sound1' : 'sound2';
-        const innerHypo = (Math.abs(reigndeer.x - this.x) + Math.abs(reigndeer.y - this.y));
-        const fullHypo = Math.sqrt(innerHypo) ;
-        this.dx = ((fullHypo * this.speed) / reigndeer.x) * ((this.x > canvas.width /2) ? -1 : 1);
-        this.dy = ((fullHypo * this.speed) / reigndeer.y) * -1;
+        // const innerHypo = (Math.abs(reigndeer.x - this.x) + Math.abs(reigndeer.y - this.y));
+        // const fullHypo = Math.sqrt(innerHypo) ;
+        // this.dx = ((fullHypo * this.speed) / reigndeer.x) * ((this.x > canvas.width /2) ? -1 : 1);
+        // this.dy = ((fullHypo * this.speed) / reigndeer.y) * -1;
     }
     update() {
-        this.y -= this.speed;
+        this.y += this.speed;
         const dx = this.x - santa.x;
         const dy = this.y - santa.y;
         this.distance = Math.sqrt(dx*dx + dy*dy);
-    //   this.y += this.dy;
-    //   this.x += this.dx; 
-     }
+        //   this.y += this.dy;
+        //   this.x += this.dx; 
+    }
     draw() {
-        ctx.fillStyle = 'black';
+        ctx.drawImage(this.Image, this.width * this.frameX, this.height * this.frameY, this.width, this.height, this.x, this.y, this.width, this.height);
+        ctx.drawImage(penguinImage, this.x, this.y, this.radius, this.radius);
+        // set penguinImage source
+        // penguinImage.src = ';
+        // ctx.fillStyle = 'black';
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
         ctx.fill();
         ctx.closePath();
         ctx.stroke();
-        // ctx.drawImage(penguinImage, this.x, this.y, this.radius, this.radius);
-    }
+        
+    }    
 }
 
 // setup path to penguin kill audio effects
@@ -196,7 +205,7 @@ function handlePenguins(){
     for (let i = 0; i < penguinsArray.length; i++){
         penguinsArray[i].update();
         penguinsArray[i].draw();
-        if (penguinsArray[i].y < 0 - penguinsArray[i].radius * 2) {
+        if (penguinsArray[i].y > canvas.height + penguinsArray[i].radius * 2) {
             penguinsArray.splice(i, 1);
             i--;
         } else if (penguinsArray[i].distance < penguinsArray[i].radius + santa.radius) { 
@@ -310,12 +319,11 @@ class Reigndeer {
         this.height = 100;
         this.x = (canvas.width / 2) - this.width / 2;
         this.y = 10;
-        this.health = 0;
-        
+        this.health = 0;    
     }
 }
 
-const reigndeer = new Reigndeer();
+reigndeer = new Reigndeer();
 // functionhandleGameOver(){
 //     ctx.fillStyle = 'white';
 //     ctx.fillText('Game Over, you reached score ' + score + 130, 250);
