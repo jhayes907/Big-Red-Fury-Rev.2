@@ -6,13 +6,16 @@ canvas.height = 800;
 // const movement = document.getElementById('movement');
 
 let santa;
+let penguin;
 let score = 0;
+let health = 100;
 let gameFrame = 0;
 ctx.font = '40px Georgia';
 let gameSpeed = .5;
 let gameOver = false;
 
 window.addEventListener('DOMContentLoaded', function(){
+
 })
 // mouse interaction
 let canvasPosition = canvas.getBoundingClientRect();
@@ -75,16 +78,6 @@ canvas.addEventListener('mouseup', function(event){
 // }
    
 
-canvas.addEventListener('mousedown', function(event){
-    mouse.click = true;
-    mouse.x = event.x - canvasPosition.left;
-    mouse.y = event.y - canvasPosition.top;
-});
-
-canvas.addEventListener('mouseup', function(event){
-    mouse.click = false;
-})
-
 // add sprite image paths
 // const santaLeft = new Image();
 // santaLeft.src = 'images/sprite-left.png';
@@ -94,25 +87,25 @@ class Santa {
     constructor(){
         this.x = canvas.width/2;
         this.y = canvas.height/2;
-        this.radius = 50;
+        this.radius = 30;
         this.angle = 0;
         this.frameX = 0;
         this.frameY = 0;
         this.frame = 0;
-    //     this.spriteWidth = 934;
-    //     this.spriteHeight = 641;
+        this.spriteWidth = 934;
+        this.spriteHeight = 641;
     }
     // move Santa to pointer  direction function
     update(){
         const dx = this.x - mouse.x;
         const dy = this.y - mouse.y;
-        // let theta = Math.atan2(dx, dy);
-        // this.angle = theta;
+        let theta = Math.atan2(dx, dy);
+        this.angle = theta;
         if (mouse.x != this.x) {
-            this.x -= dx/50;
+            this.x -= dx/30;
         }
         if (mouse.y != this.y) {
-            this.y -= dy/50;
+            this.y -= dy/30;
         }    
     }
     draw(){// Directional lineTo
@@ -149,31 +142,37 @@ santa = new Santa();
 // add penguin sprite paths
 // Baddies
 const penguinsArray = [];
-// const penguinImage = new Image();
+const penguinImage = new Image();
 // set penguinImage source
 // penguinImage.src = 'penguinImage';
-
+const incoming = ['L', 'R', 'B'];
 class Penguin {
     constructor() {
         this.x = Math.random() * canvas.width;
         this.y = canvas.height + 100 + Math.random() * canvas.height;
         // modify these properties for size and speed
-        this.radius = 50;
-        this.speed = Math.random() * 5 + 1;
+        this.radius = 18;
+        this.speed = 1.5;
+        this.position = incoming[Math.floor(Math.random() * 3)];
         this.distance;
         this.counted = false;
         // // change to collision kill sound
         // this.sound = math.random() <= 0.5 ? 'sound1' : 'sound2';
+        const innerHypo = (Math.abs(reigndeer.x - this.x) + Math.abs(reigndeer.y - this.y));
+        const fullHypo = Math.sqrt(innerHypo) ;
+        this.dx = ((fullHypo * this.speed) / reigndeer.x) * ((this.x > canvas.width /2) ? -1 : 1);
+        this.dy = ((fullHypo * this.speed) / reigndeer.y) * -1;
     }
     update() {
         this.y -= this.speed;
         const dx = this.x - santa.x;
         const dy = this.y - santa.y;
         this.distance = Math.sqrt(dx*dx + dy*dy);
-       
-    }
+    //   this.y += this.dy;
+    //   this.x += this.dx; 
+     }
     draw() {
-        ctx.fillStyle = 'blue';
+        ctx.fillStyle = 'black';
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
         ctx.fill();
@@ -264,9 +263,10 @@ class Enemy {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
-        // ctx.drawImage(enemyImage, this.frameX * this.spriteWidth, this.frameY * this.spriteHeight, 
-        // this.spriteWidth, this.spriteHeight, this.x, this.y, this.spriteWidth / 4, this.spriteHeight / 
-        // 4);
+        ctx.stroke();
+        ctx.drawImage(enemyImage, this.frameX * this.spriteWidth, this.frameY * this.spriteHeight, 
+        this.spriteWidth, this.spriteHeight, this.x, this.y, this.spriteWidth / 4, this.spriteHeight / 
+        4);
     }
     update(){
         this.x -=this.speed;
@@ -293,16 +293,29 @@ class Enemy {
     const dy = this.y - player.y;
     const distance = Math.sqrt(dx*dx + dy*dy);
     if (distance < this.radius + player.radius){
-        handleGameOver();
+        // handleGameOver();
     }
   }
 }
-const enemy1 = new Enemy();
-function handleEnemies(){
-        enemy1.draw();
-        enemy1.update();
+// const enemy1 = new Enemy();
+// function handleEnemies(){
+//         enemy1.draw();
+//         enemy1.update();
+// }
+
+class Reigndeer {
+    constructor(){
+        this.alive = true;
+        this.width =  100;
+        this.height = 100;
+        this.x = (canvas.width / 2) - this.width / 2;
+        this.y = 10;
+        this.health = 0;
+        
+    }
 }
 
+const reigndeer = new Reigndeer();
 // functionhandleGameOver(){
 //     ctx.fillStyle = 'white';
 //     ctx.fillText('Game Over, you reached score ' + score + 130, 250);
@@ -317,8 +330,10 @@ function animate() {
     santa.update();
     santa.draw();
     // handleEnemies();
+    ctx.fillStyle = 'red';
+    ctx.fillText('health: ' + health, 1260, 50);
     ctx.fillStyle = 'black';
-    ctx.fillText('score: ' + score, 10, 50);
+    ctx.fillText('score: ' + score, 20, 50);
     gameFrame++;
     if (!gameOver) requestAnimationFrame(animate);
     

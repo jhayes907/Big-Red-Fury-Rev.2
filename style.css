@@ -15,5 +15,30 @@ body {
     width: 1500px;
     height: 800px;
     border: 4px solid black;
-    background: ; 
+    background-image: url(assets/snowbackground.png);
+    background-repeat: no-repeat;
+    background-size: 1500px;
+    background-position: ;    
 }
+ /* .next a, .prev a {
+    width: 200px;
+     background: #fff; 
+} 
+/* .next {
+    float: left;
+}
+.prev {
+    float: right;
+} 
+.previous a:before, .next a:before {
+    content:'';
+    width: 1500;
+    height: 800;
+    margin: 0 5px 0 0;
+    background: url(assets/snowbackground.png) no-repeat 0 0;
+    display: inline-block;
+}
+.next a:before {
+    margin: 0 0 0 5px;
+    transform: scaleX(-1);
+} */
