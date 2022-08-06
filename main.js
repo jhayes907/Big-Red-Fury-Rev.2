@@ -169,8 +169,8 @@ class Penguin {
     const dx = this.x - santa.x;
     const dy = this.y - santa.y;
     this.distance = Math.sqrt(dx * dx + dy * dy);
-    //     this.y += this.dy;
-    //     this.x += this.dx;
+        // this.y += this.dy;
+        // this.x += this.dx;
   }
   draw() {
     // ctx.fillStyle = 'black';
@@ -189,8 +189,7 @@ class Penguin {
       this.x - 13,
       this.y - 23,
       this.spriteWidth / 4,
-      this.spriteHeight / 4.5
-    );
+      this.spriteHeight / 4.5);
   }
 }
 
@@ -220,9 +219,9 @@ class Penguin {
 
 // setup path to penguin kill audio effects
 const penguinEnd1 = document.createElement("audio");
-penguinEnd1.src = "assets/sounds/penguin_RIP 01.wav";
+penguinEnd1.src = "assets/sounds/penguin_RIP01.wav";
 const penguinEnd2 = document.createElement("audio");
-penguinEnd2.src = "assets/sounds/penguin_RIP 02.wav";
+penguinEnd2.src = "assets/sounds/penguin_RIP02.wav";
 
 // penguin rendering and hit testing
 function handlePenguins() {
@@ -235,7 +234,7 @@ function handlePenguins() {
     if (penguinsArray[i].y > canvas.height + penguinsArray[i].radius * 2) {
       penguinsArray.splice(i, 1);
       i--;
-      // health -= 10;
+      health -= 10;
     } else if (
       penguinsArray[i].distance <
       penguinsArray[i].radius + santa.radius
@@ -260,101 +259,114 @@ function handlePenguins() {
 // Ememies
 const enemyImage = new Image();
 enemyImage.src = "assets/polar_bear/walk_left/bear_walk_left.png";
+
 class Enemy {
   constructor() {
     this.x = canvas.width + 200;
-    this.y = Math.random() * (canvas.height - 150) + 90;
-    this.radius = 60;
-    this.speed = Math.random() * 2 + 2;
+    this.y = Math.random() * (canvas.height - 200) + 90;
+    this.radius = 45;
+    this.speed = .5;
     this.frame = 0;
-    this.frameX = 1;
-    this.frameY = 8;
+    this.frameX = 0;
+    this.frameY = 0;
     this.spriteWidth = 120;
-    this.spriteHeight = 960;
+    this.spriteHeight = 120;
   }
-  // sprite movement animations
-  update() {
-    this.x -= this.speed;
-    if (this.x < 0 - this.radius * 2) {
-      this.x = canvas.width + 200;
-      this.y = Math.random() * (canvas.height - 150) + 90;
-      this.speed = math.random() * 2 + 2;
-    }
-    if (gameFrame % 5 == 0) {
-      this.frame++;
-      if (this.frame >= 12) this.frame = 0;
-      if (this.frame == 3 || this.frame == 7 || this.frame == 11) {
-        this.frameX = 0;
-      } else {
-        this.frameX++;
-      }
-      if (this.frame < 3) this.frameY = 0;
-      else if (this.frame < 7) this.frameY = 1;
-      else if (this.frame < 11) this.frameY = 2;
-      else this.frameY = 0;
-    }
-    // collision detection with Santa
-    const dx = this.x - player.x;
-    const dy = this.y - player.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    if (distance < this.radius + player.radius) {
-      handleGameOver();
-    }
-  }
+
   draw() {
-    ctx.fillStyle = "red";
-    tx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
+    // ctx.fillStyle = "red";
+    // ctx.beginPath();
+    // ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    // ctx.fill();
+    // ctx.stroke();
     ctx.drawImage(
       enemyImage,
       this.frameX * this.spriteWidth,
       this.frameY * this.spriteHeight,
       this.spriteWidth,
       this.spriteHeight,
-      this.x,
-      this.y,
-      this.spriteWidth / 4,
-      this.spriteHeight / 4
-    );
-  }
-}
+      this.x - 85,
+      this.y - 84,
+      this.spriteWidth + 60,
+      this.spriteHeight + 80);
+    }
 
-const enemy = new Enemy();
-function handleEnemies() {
-  enemy.draw();
-  enemy.update();
-}
-let reindeerImage = new Image();
-reindeerImage.src = "assets/Santa-sprites/Santa_and_Sleigh-1.png";
-class Reindeer {
-  constructor() {
-    this.alive = true;
-    this.width = 100;
-    this.height = 100;
-    this.x = canvas.width / 2 - this.width / 2;
-    this.y = 10;
-    this.reindeerHealth = 100;
+  // sprite movement animations
+  update() {
+    this.x -= this.speed;
+    if (this.x < 0 - this.radius * 2) {
+      this.x = canvas.width + 200;
+      this.y = Math.random() * (canvas.height - 150) + 90;
+      this.speed = Math.random() * 2 + 2;
+    }
+    if (gameFrame % 5 == 0) {
+      this.frame++;
+      if (this.frame <= 2) this.frame = 0;
+      if (this.frame == 0) {
+        this.frameX = 0;
+      } else {
+        this.frameX++;
+      }
+      if (this.frame > 8) this.frame = 0;
+      // else if (this.frame > 7) this.frameY = 0;
+      // else if (this.frame < 1) this.frameY = 0;
+      // else
+       this.frameY = 0;
+    }
+    // collision detection with Santa
+      const dx = this.x - santa.x;
+      const dy = this.y - santa.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      if (distance < this.radius + santa.radius) {
+        handleGameOver();
+      }
+     }
   }
-}
-reindeer = new Reindeer();
 
-function handleReindeer() {}
-// functionhandleGameOver(){
-//     ctx.fillStyle = 'white';
-//     ctx.fillText('Game Over, you reached score ' + score + 130, 250);
-//     gameOver = true;
+
+const enemy1 = new Enemy();
+function handleEnemy() {
+  enemy1.update();
+  enemy1.draw();
+}
+function handleGameOver(){
+  ctx.fillStyle = 'white';
+  ctx.fillText('Game Over, you lost the game' , 540, 400);
+  ctx.stroke();
+  gameOver = true;
+  
+}
+// if (health === 0 || enemy1.radius === santa.radius || timeOut === 0) handleGameOver();
+
+
+// let reindeerImage = new Image();
+// reindeerImage.src = "assets/Santa-sprites/Santa_and_Sleigh-1.png";
+// class Reindeer {
+//   constructor() {
+//     this.alive = true;
+//     this.width = 0;
+//     this.height = 0;
+//     this.x = canvas.width / 2 - this.width / 2;
+//     this.y = 10;
+//     this.Health = 100;
+//   }
 // }
-// //
+// reindeer = new Reindeer();
+
+// function handleReindeer() {
+
+// }
+
 // animations loop
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // handleEnemies();
   handlePenguins();
   santa.update();
   santa.draw();
-  handleReindeer();
+  handleEnemy();
+  // handleReindeer();
+  ctx.fillStyle ='green';
+  ctx.fillText('Dont let them escape! ', 600, 50);
   ctx.fillStyle = "red";
   ctx.fillText("Health: " + health, 1260, 50);
   ctx.fillStyle = "black";
