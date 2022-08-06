@@ -159,7 +159,7 @@ class Penguin {
     this.spriteHeight = 231;
     // modify these properties for size and speed
     this.radius = 16;
-    this.speed = 0.3;
+    this.speed = 1;
     this.distance;
     this.counted = false;
     this.sound = Math.random() <= 0.5 ? 'sound1' : 'sound2';
@@ -257,8 +257,6 @@ function handlePenguins() {
       if(score == 500 && health > 0) {
         handleYouWin();
       }
-  
-      
     }
   }
   for (let i = 0; i < penguinsArray.length; i++) {}
@@ -355,6 +353,7 @@ function handleGameOver(){
   ctx.fillStyle = 'red';
   ctx.fillText('Game Over, Christmas is cancelled.' , 500, 400);
   gameOver = true;
+  document.createElement('button')
 }
 
 function handleYouWin() {
