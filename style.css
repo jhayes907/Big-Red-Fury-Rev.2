@@ -17,19 +17,18 @@ body {
     border: 4px solid black;
     background-image: url(assets/snowbackground.png);
     background-repeat: no-repeat;
-    background-size: 1500px;
-    background-position: ;    
+    background-size: 1500px;    
 }
  /* .next a, .prev a {
     width: 200px;
-     background: #fff; 
+     background: #fff; */
 } 
-/* .next {
+.next {
     float: left;
 }
 .prev {
     float: right;
-} 
+}
 .previous a:before, .next a:before {
     content:'';
     width: 1500;
