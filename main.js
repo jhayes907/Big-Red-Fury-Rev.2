@@ -18,6 +18,7 @@ ctx.font = '40px Georgia';
 let gameSpeed = 0.5;
 let gameAudio = true;
 let gameOver = false;
+let youWin = false;
 
 const audio3 = document.getElementById('soundtrack');
 
@@ -88,7 +89,7 @@ class Santa {
   draw() {
     // Directional lineTo
     if (mouse.click) {
-      ctx.lineWidth = 0.1;
+      ctx.lineWidth = 0.3;
       ctx.beginPath();
       ctx.moveTo(this.x, this.y);
       ctx.lineTo(mouse.x, mouse.y);
@@ -234,9 +235,11 @@ function handlePenguins() {
       penguinsArray.splice(i, 1);
       i--;
       health -= 10;
+      if (health == 0) {
+        handleGameOver();
+      }
     } else if (
-      penguinsArray[i].distance <
-      penguinsArray[i].radius + santa.radius
+      penguinsArray[i].distance < penguinsArray[i].radius + santa.radius
     ) {
       if (!penguinsArray[i].counted) {
         if (penguinsArray[i].sound == 'sound1') {
@@ -245,11 +248,17 @@ function handlePenguins() {
           penguinEnd2.play();
         }
         score += 10;
-        penguinsArray[i].counted = true;
-        // change to dead penguin flash
-        penguinsArray.splice(i, 1);
-        i--;
       }
+      penguinsArray[i].counted = true;
+      // change to dead penguin flash
+      penguinsArray.splice(i, 1);
+      i--;
+
+      if(score == 500 && health > 0) {
+        handleYouWin();
+      }
+  
+      
     }
   }
   for (let i = 0; i < penguinsArray.length; i++) {}
@@ -332,7 +341,7 @@ class Enemy {
         }
 
         handleGameOver();
-      }
+      }  
      }
   }
 
@@ -344,12 +353,15 @@ function handleEnemy() {
 }
 function handleGameOver(){
   ctx.fillStyle = 'red';
-  ctx.fillText('Game Over, you lost the game' , 540, 400);
-  ctx.stroke();
+  ctx.fillText('Game Over, Christmas is cancelled.' , 500, 400);
   gameOver = true;
-  
 }
-// if (health === 0 || enemy1.radius === santa.radius || timeOut === 0) handleGameOver();
+
+function handleYouWin() {
+  ctx.fillStyle = 'green';
+  ctx.fillText('You saved Christmas', 540, 400);
+  youWin = true;
+}
 
 
 // let reindeerImage = new Image();
@@ -377,7 +389,6 @@ function animate() {
   santa.update();
   santa.draw();
   handleEnemy();
-  // handleReindeer();
   ctx.fillStyle ='green';
   ctx.fillText('Dont let them escape! ', 600, 50);
   ctx.fillStyle = 'red';
@@ -385,14 +396,16 @@ function animate() {
   ctx.fillStyle = 'black';
   ctx.fillText("score: " + score, 20, 50);
   gameFrame++;
-  if (!gameOver) requestAnimationFrame(animate);
+  if (!gameOver && !youWin) requestAnimationFrame(animate);
+}
+if(score >= 10 && health > 0) {
+  youWin();
 }
 animate();
 
 window.addEventListener('resize', function () {
   canvas.getBoundingClientRect();
 });
-
 function playMusic() {
   if (gameAudio) {
     gameAudio = false;  
