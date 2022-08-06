@@ -10,6 +10,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-image: url(assets/christmas_update.png);
+    background-size: 100%;
 }
 #canvas1 {
     width: 1500px;
@@ -19,10 +21,12 @@ body {
     background-repeat: no-repeat;
     background-size: 1500px;    
 }
- /* .next a, .prev a {
-    width: 200px;
-     background: #fff; */
-} 
+/* .soundtrack {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+/*  
 .next {
     float: left;
 }
@@ -40,4 +44,4 @@ body {
 .next a:before {
     margin: 0 0 0 5px;
     transform: scaleX(-1);
-} */
+}  */

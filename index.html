@@ -12,10 +12,19 @@
 
 <body>
     <div id = "container">
+        <aside  id="button"></aside>
         <canvas id="canvas1"></canvas> 
     </div>
     
-    <audio src="assets/sounds/penguin_dance.mp3"></audio>
+    <!-- <audio id= 'soundtrack' src="assets/sounds/penguin_dance.mp3"></audio> -->
+    <audio id='soundtrack'  controls>
+        
+        <source src="assets/sounds/penguin_dance.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+     
     <script src="main.js"></script>  
-</body>   
+</body> 
+
+  
 </html>

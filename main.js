@@ -3,8 +3,7 @@ const canvas = document.getElementById('canvas1');
 const ctx = canvas.getContext('2d');
 canvas.width = 1500;
 canvas.height = 800;
-let gameAudio = true;
-gameAudio.src = 'assets/sounds/penguin_dance.mp3';
+
 
 
 
@@ -17,17 +16,14 @@ let score = 0;
 let gameFrame = 0;
 ctx.font = '40px Georgia';
 let gameSpeed = 0.5;
+let gameAudio = true;
 let gameOver = false;
 
-window.addEventListener('DOMcontendLoaded', event => {
-const audio = document.querySelector('audio');
-audio.load();
-audio.volume = 10;
-audio.play();
-});
+const audio3 = document.getElementById('soundtrack');
 
 
-// })
+
+
 // mouse interaction
 let canvasPosition = canvas.getBoundingClientRect();
 const mouse = {
@@ -40,6 +36,9 @@ canvas.addEventListener('mousedown', function (event) {
   mouse.click = true;
   mouse.x = event.x - canvasPosition.left;
   mouse.y = event.y - canvasPosition.top;
+  playMusic();
+  audio3.volume = .2
+  
 });
 
 canvas.addEventListener('mouseup', function (event) {
@@ -271,7 +270,7 @@ class Enemy {
     this.x = canvas.width + 200;
     this.y = Math.random() * (canvas.height - 200) + 90;
     this.radius = 45;
-    this.speed = .5;
+    this.speed = 1.5;
     this.frame = 0;
     this.frameX = 0;
     this.frameY = 0;
@@ -344,7 +343,7 @@ function handleEnemy() {
   enemy1.draw();
 }
 function handleGameOver(){
-  ctx.fillStyle = 'white';
+  ctx.fillStyle = 'red';
   ctx.fillText('Game Over, you lost the game' , 540, 400);
   ctx.stroke();
   gameOver = true;
@@ -393,3 +392,13 @@ animate();
 window.addEventListener('resize', function () {
   canvas.getBoundingClientRect();
 });
+
+function playMusic() {
+  if (gameAudio) {
+    gameAudio = false;  
+  
+    audio3.play();
+    audio3.volume = 1;
+    audio3.loop = true;
+  }
+};
