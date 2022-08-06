@@ -1,31 +1,31 @@
 // canvas setup
-const canvas = document.getElementById("canvas1");
-const ctx = canvas.getContext("2d");
+const canvas = document.getElementById('canvas1');
+const ctx = canvas.getContext('2d');
 canvas.width = 1500;
 canvas.height = 800;
 let gameAudio = true;
-gameAudio.src = "assets/sounds/penguin_dance.mp3";
+gameAudio.src = 'assets/sounds/penguin_dance.mp3';
+
+
 
 let santa;
 let penguinTimer = null;
-let penguin = {
-  img: null,
-  x: 0,
-  y: 0,
-  width: 28,
-  height: 42,
-  currentframe: 0,
-  totalframes: 8,
-};
+let penguin;
 let reindeer;
 let health = 100;
 let score = 0;
 let gameFrame = 0;
-ctx.font = "40px Georgia";
+ctx.font = '40px Georgia';
 let gameSpeed = 0.5;
 let gameOver = false;
 
-// window.addEventListener('DOMContentLoaded', function(){
+window.addEventListener('DOMcontendLoaded', event => {
+const audio = document.querySelector('audio');
+audio.load();
+audio.volume = 10;
+audio.play();
+});
+
 
 // })
 // mouse interaction
@@ -36,21 +36,21 @@ const mouse = {
   click: false,
 };
 
-canvas.addEventListener("mousedown", function (event) {
+canvas.addEventListener('mousedown', function (event) {
   mouse.click = true;
   mouse.x = event.x - canvasPosition.left;
   mouse.y = event.y - canvasPosition.top;
 });
 
-canvas.addEventListener("mouseup", function (event) {
+canvas.addEventListener('mouseup', function (event) {
   mouse.click = false;
 });
 
 // add sprite image paths
 const santaRight = new Image();
-santaRight.src = "assets/Santa-sprites/Idle-(1).png";
+santaRight.src = 'assets/Santa-sprites/Idle-(1).png';
 const santaLeft = new Image();
-santaLeft.src = "assets/Santa-sprites/Idle-(left).png";
+santaLeft.src = 'assets/Santa-sprites/Idle-(left).png';
 // const santaDead = new Image();
 // santaDead.src = 'assets/Santa-sprites/Dead-(17).png';
 // const santaDeadLeft = new Image();
@@ -144,7 +144,7 @@ santa = new Santa();
 const penguinsArray = [];
 // add penguin sprite paths
 let penguinImage = new Image();
-penguinImage.src = "assets/penguin-sprites/Turn_Around3.png";
+penguinImage.src = 'assets/penguin-sprites/Turn_Around3.png';
 
 class Penguin {
   constructor() {
@@ -162,7 +162,7 @@ class Penguin {
     this.speed = 0.3;
     this.distance;
     this.counted = false;
-    this.sound = Math.random() <= 0.5 ? "sound1" : "sound2";
+    this.sound = Math.random() <= 0.5 ? 'sound1' : 'sound2';
   }
   update() {
     this.y += this.speed;
@@ -218,10 +218,10 @@ class Penguin {
 // animatePenguin();
 
 // setup path to penguin kill audio effects
-const penguinEnd1 = document.createElement("audio");
-penguinEnd1.src = "assets/sounds/penguin_RIP01.wav";
+const penguinEnd1 = document.createElement('audio');
+penguinEnd1.src = 'assets/sounds/penguin_RIP01.wav';
 const penguinEnd2 = document.createElement("audio");
-penguinEnd2.src = "assets/sounds/penguin_RIP02.wav";
+penguinEnd2.src = 'assets/sounds/penguin_RIP02.wav';
 
 // penguin rendering and hit testing
 function handlePenguins() {
@@ -240,7 +240,7 @@ function handlePenguins() {
       penguinsArray[i].radius + santa.radius
     ) {
       if (!penguinsArray[i].counted) {
-        if (penguinsArray[i].sound == "sound1") {
+        if (penguinsArray[i].sound == 'sound1') {
           penguinEnd1.play();
         } else {
           penguinEnd2.play();
@@ -257,8 +257,14 @@ function handlePenguins() {
 }
 
 // Ememies
+
+const bearGrowl1 = document.createElement('audio');
+bearGrowl1.src = 'assets/sounds/bear_01.ogg';
+const bearGrowl2 = document.createElement('audio');
+bearGrowl2.src = 'assets/sounds/bear_02.ogg';
+
 const enemyImage = new Image();
-enemyImage.src = "assets/polar_bear/walk_left/bear_walk_left.png";
+enemyImage.src = 'assets/polar_bear/walk_left/bear_walk_left.png';
 
 class Enemy {
   constructor() {
@@ -271,6 +277,7 @@ class Enemy {
     this.frameY = 0;
     this.spriteWidth = 120;
     this.spriteHeight = 120;
+    this.sound = Math.random() <= 0.5 ? 'sound1' : 'sound2';
   }
 
   draw() {
@@ -298,6 +305,7 @@ class Enemy {
       this.x = canvas.width + 200;
       this.y = Math.random() * (canvas.height - 150) + 90;
       this.speed = Math.random() * 2 + 2;
+      
     }
     if (gameFrame % 5 == 0) {
       this.frame++;
@@ -318,6 +326,12 @@ class Enemy {
       const dy = this.y - santa.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
       if (distance < this.radius + santa.radius) {
+        if (enemy1.sound == 'sound1') {
+         bearGrowl1.play();
+        } else {
+          bearGrowl2.play();
+        }
+
         handleGameOver();
       }
      }
@@ -367,15 +381,15 @@ function animate() {
   // handleReindeer();
   ctx.fillStyle ='green';
   ctx.fillText('Dont let them escape! ', 600, 50);
-  ctx.fillStyle = "red";
-  ctx.fillText("Health: " + health, 1260, 50);
-  ctx.fillStyle = "black";
+  ctx.fillStyle = 'red';
+  ctx.fillText('Health: ' + health, 1260, 50);
+  ctx.fillStyle = 'black';
   ctx.fillText("score: " + score, 20, 50);
   gameFrame++;
   if (!gameOver) requestAnimationFrame(animate);
 }
 animate();
 
-window.addEventListener("resize", function () {
+window.addEventListener('resize', function () {
   canvas.getBoundingClientRect();
 });
